@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/SindidR/Sindids-Team-Profile-Generator/issues"
   },
-  "homepage": "https://github.com/SindidR/Sindids-Team-Profile-Generator#readme"
+  "homepage": "https://github.com/SindidR/Sindids-Team-Profile-Generator#readme",
+  "dependencies": {
+    "bootstrap": "^5.2.2"
+  }
 }
