@@ -1,8 +1,3 @@
-function initApp() {
-    startHtml();
-    addCrew();
-}
-
 const inquirer = require('inquirer');
 const fs = require('fs');
 
@@ -11,6 +6,95 @@ const Intern = require('./lib/Intern')
 const Manager = require('./lib/Manager')
 
 const employees = [];
+
+function initApp() {
+    startHtml();
+    addMember();
+}
+
+
+fs.appendFile("./dist/index.html", html, function (err) {
+        if (err) {
+            console.log(err);
+        };
+    });
+    console.log("end");
+
+    
+    
+
+function addMember() {
+    inquirer
+    .prompt([
+        {
+            type: 'input',
+            message: 'What is your Name?',
+            name: 'name',
+          },
+          {
+            type: 'input',
+            message: 'What is your ID?',
+            name: 'id',
+          },
+          {
+            type: 'input',
+            message: 'What is your Email?',
+            name: 'email',
+          },
+          {
+            type: 'list',
+            message: 'What is your Role?',
+            choices: [
+                "Engineer",
+                "Intern",
+                "Manager"
+            ],
+            name: 'role'
+          }
+        ])
+.then(function({name, id, email, role}) {
+    let roleInfo = "";
+    if (role === "Engineer") {
+        roleInfo = "GitHub username";
+    } else if (role === "Intern") {
+        roleInfo = "School Name";
+    } else if (role === "Manager") {
+        roleInfo = "Office Number"
+    }
+    inquirer
+    .prompt([{
+        message: `Enter Crew Members ${roleInfo}`,
+        name: "roleInfo"
+    },
+    {
+        type: 'confirm',
+        message: 'Do you want to add anymore Crew members?',
+        name: 'confirmAddMember'
+        }
+    ])
+    .then(function({roleInfo, confirmAddMember}) {
+        let newMember;
+        if (role === "Engineer") {
+            newCrew = new Engineer(name, id, email, roleInfo);
+         } else if (role === "Manager") {
+            newCrew = new Manager(name, id, email, roleInfo);
+        } else if (role === "Intern") {
+            newCrew = new Intern(name, id, email, roleInfo);
+        }
+        employees.push(newMember);
+        addHtml(newMember)
+            .then(function() {
+                if (confirmAddMember === confirm) {
+                    addMember();
+                } else { 
+                    finishHtml();
+                }
+                
+            });
+        });
+    });
+}
+
 
 function startHtml () {
     `<!DOCTYPE html>
@@ -33,7 +117,7 @@ if(err){
 });
 console.log("start");
 }
-function addHtml(crew) {
+function addHtml(member) {
     return new Promise(function(resolve, reject) {
         const name = member.getName();
         const role = member.getRole();
@@ -65,7 +149,7 @@ function addHtml(crew) {
             </div>
         </div>`;
         } else {
-            const officePhone = member.getOffice();
+            const officePhone = getOfficeNumber();
             data = `<div class="col-6">
             <div class="card">
             <h5 class="card-header">${name}<br /><br />Manager</h5>
@@ -94,85 +178,6 @@ function finishHtml() {
     
 </body>
 </html>`;
-
-    fs.appendFile("./dist/index.html", html, function (err) {
-        if (err) {
-            console.log(err);
-        };
-    });
-    console.log("end");
 }
-    
-    
 
-function addCrew() {
-    inquirer
-    .prompt([
-        {
-            type: 'input',
-            message: 'What is your Name?',
-            name: 'name',
-          },
-          {
-            type: 'input',
-            message: 'What is your ID?',
-            name: 'id',
-          },
-          {
-            type: 'input',
-            message: 'What is your Email?',
-            name: 'email',
-          },
-          {
-            type: 'list',
-            message: 'What is your Role?',
-            choices: [
-                "Engineer",
-                "Intern",
-                "Manager"
-            ],
-            name: 'role'
-          }
-        ])
-.then(function({name, id, email, role}) {
-    let roleData = "";
-    if (role === "Engineer") {
-        roleData = "GitHub username";
-    } else if (role === "Intern") {
-        roleData = "School Name";
-    } else if (role === "Manager") {
-        roleData = "Office Number"
-    }
-    inquirer
-    .prompt([{
-        message: `Enter Crew Members ${roleData}`,
-        name: "roleData"
-    },
-    {
-        type: 'confirm',
-        message: 'Do you want to add anymore Crew members?',
-        name: 'confirmAddCrew'
-        }
-    ])
-    .then(function({roleData, confirmAddCrew}) {
-        let newCrew;
-        if (role === "Engineer") {
-            newCrew = new Engineer(name, id, email, roleInfo);
-         } else if (role === "Manager") {
-            newCrew = new Manager(name, id, email, roleInfo);
-        } else if (role === "Intern") {
-            newCrew = new Intern(name, id, email, roleInfo);
-        }
-        employees.push(newCrew);
-        addHtml(newCrew)
-            .then(function() {
-                if (confirmAddCrew === confirm) {
-                    addCrew();
-                } else { 
-                    finishHtml();
-                }
-                
-            });
-        });
-    });
-}
+
