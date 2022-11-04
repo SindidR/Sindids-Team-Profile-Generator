@@ -21,10 +21,10 @@ Team Profile Generator
 This is a Node.js command-line application that takes in data on employees and their respective roles in the company. Then it generates a html webpage that shows the data on the employees 
 
 ## Installation
-Node index in the terminal which will generate prompts
+Use command "npm i" in terminal then use command "node index" and answer prompts.
 
 ## Usage
-Creates a Team profile which allows you to add summaries.
+Creates a Team profile around the users employees.
 
 ## Contribute
 

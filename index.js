@@ -4,23 +4,32 @@ const fs = require('fs');
 const Engineer = require('./lib/Engineer')
 const Intern = require('./lib/Intern')
 const Manager = require('./lib/Manager')
+const Employee = require('./lib/Employee')
 
 const employees = [];
 
+
 function initApp() {
-    startHtml();
     addMember();
+   // startHtml(); 
 }
 
 
-fs.appendFile("./dist/index.html", html, function (err) {
-        if (err) {
-            console.log(err);
-        };
-    });
-    console.log("end");
+//fs.appendFile("./dist/index.html", html, function (err) {
+       // if (err) {
+          //  console.log(err);
+       // };
+   // });
+   // console.log("end");
 
+   function confirmAddMember() {
+    if (confirmAddMember === confirm) {
+        addMember();
+    } else { 
+        finishHtml();
+    }
     
+};    
     
 
 function addMember() {
@@ -73,7 +82,7 @@ function addMember() {
         }
     ])
     .then(function({roleInfo, confirmAddMember}) {
-        let newMember;
+        let newCrew;
         if (role === "Engineer") {
             newCrew = new Engineer(name, id, email, roleInfo);
          } else if (role === "Manager") {
@@ -81,16 +90,10 @@ function addMember() {
         } else if (role === "Intern") {
             newCrew = new Intern(name, id, email, roleInfo);
         }
-        employees.push(newMember);
-        addHtml(newMember)
-            .then(function() {
-                if (confirmAddMember === confirm) {
-                    addMember();
-                } else { 
-                    finishHtml();
-                }
-                
-            });
+        employees.push(newCrew)
+        confirmAddMember();
+      //  addHtml(newMember)
+ 
         });
     });
 }
@@ -180,4 +183,6 @@ function finishHtml() {
 </html>`;
 }
 
+
+initApp(); 
 
